@@ -14,10 +14,12 @@ const app = (req, res) =>{
     return readFile(res, './html/404.html');
 };
 
+//Abstracted Route Function***should to kept in a different file
 const routeToFile = (req, res, url, filePath) => {
     if(req.url == url) return readFile(res, filePath);
 };
 
+//Server File for the App
 http.createServer(app)
     .listen(8080);
 
