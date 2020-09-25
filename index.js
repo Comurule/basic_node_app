@@ -3,23 +3,18 @@ const { readFile } = require('./fs_read');
 
 const app = (req, res) =>{
     //Event Listeners
-    req.on('close', ()=>{ console.log(res.statusCode, req.url)});
-    req.on('error', error => { console.log(error) });
+    res.on('close', ()=>{ console.log(req.method, req.url, res.statusCode)});
+    req.on('error', error => { console.log(req.error) });
 
     //Routes
-    routeToFile(req, res, '/about', './html/about.html');
-    routeToFile(req, res, '/contact-me', './html/contact_me.html');
-    routeToFile(req, res, '/', './html/index.html');
+    if(req.url == '/about') return readFile(res, 200, './html/about.html');
+    if(req.url == '/contact-me') return readFile(res, 200, './html/contact_me.html');
+    if(req.url == '/') return readFile(res, 200, './html/index.html');
     
-    return readFile(res, './html/404.html');
+    return readFile(res, 404, './html/404.html');
 };
 
-//Abstracted Route Function***should to kept in a different file
-const routeToFile = (req, res, url, filePath) => {
-    if(req.url == url) return readFile(res, filePath);
-};
-
-//Server File for the App
+//Create Server for the App
 http.createServer(app)
     .listen(8080);
 
